@@ -1,4 +1,6 @@
 <?php
+
+    require 'functions.php';
     $list = file_get_contents('products.json', true);
     $products = json_decode($list);
     
@@ -6,6 +8,7 @@
         $item = $_GET['item'];
         $products[] = $item;
     }
+
     $json = json_encode($products, JSON_PRETTY_PRINT);
     file_put_contents('products.json', $json);
 ?>
@@ -30,9 +33,16 @@
         ?>
     </div>
     <div class="container mt-3 d-flex flex-column text-center">
-        <a href="/products.php">Agregar otro producto</a>
-        <!--<a href="https://api.whatsapp.com/send?phone=4451575864?text=De%20la%20FARMACIA%20quiero%3A%0AParacetamol%0AAspirina">Enviar Lista</a>-->
-        <a href="https://wa.me/524451575864?text=De%20la%20FARMACIA%20quiero%3A%0AParacetamol%0AAspirina">Enviar Lista</a>
+        <a href="/categories.php">Agregar otro producto</a>
+        <a id="whatsapp" onclick=someFunction() href="#">Enviar Lista</a>
+        
     </div>
+
+    <script>
+        function someFunction() {
+            
+            document.getElementById("whatsapp").href = "https://wa.me/524451575864?text=De%20la%20FARMACIA%20quiero%3A%0AParacetamol%0AAspirina";
+        };        
+    </script>
 </body>
 </html>

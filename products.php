@@ -1,9 +1,29 @@
 <?php
+    require 'config.php';
+
+    $pdo = new PDO(
+        $config['database_dsn'],
+        $config['database_user'],
+        $config['database_pass']
+    );
+
     if ( isset($_GET['category']) ) {
         $category = $_GET['category'];
     } else {
         $category = '';
     }
+
+    $query = 'SELECT id FROM category WHERE category_name = :catName';
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':catName', $category);
+    $stmt->execute();
+    $category_id = $stmt->fetch();
+
+    $products_query = 'SELECT * FROM product WHERE category = :catID';
+    $statement = $pdo->prepare($products_query);
+    $statement->bindParam(':catID', $category_id['id'], PDO::PARAM_INT);
+    $statement->execute();
+    $rows = $statement->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -23,8 +43,9 @@
         <h3><?php echo strtoupper($category); ?></h3>
     </div>
     <div class="container mt-3 d-flex flex-column text-center">
-        <a href="/list.php?item=Paracetamol">Paracetamol</a>
-        <a href="/list.php?item=Aspirina">Aspirina</a>
+        <?php foreach ( $rows as $row ) { ?>
+            <a href="/list.php?item=<?php echo $row['product_name']; ?>"><?php echo $row['product_name']; ?></a>        
+        <?php } ?>
     </div>
 </body>
 </html>

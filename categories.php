@@ -1,3 +1,15 @@
+<?php
+
+require 'config.php';
+$pdo = new PDO(
+    $config['database_dsn'],
+    $config['database_user'],
+    $config['database_pass']
+);
+$result = $pdo->query('SELECT * FROM category');
+$rows = $result->fetchAll();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,16 +25,18 @@
     </div>
     <div class="container d-flex flex-column align-items-center">
         <div class="row">
-            <div class="col-sm-12">
-                <a href="/products.php?category=Farmacia">
-                    <div class="card mb-3" style="width: 18rem;">
-                        <img src="img/farmacia.jpg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text text-center">FARMACIA</p>
+            <?php foreach ($rows as $row) { ?>
+                <div class="col-sm-12">
+                    <a href="/products.php?category=<?php echo $row['category_name']; ?>">
+                        <div class="card mb-3" style="width: 18rem;">
+                            <img src="img/<?php echo $row['category_image']; ?>" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <p class="card-text text-center"><?php echo $row['category_name']; ?></p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
+            <?php } ?>
         </div>
     </div>
 </body>
